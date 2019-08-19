@@ -13,6 +13,7 @@ after_success:
   - docker build -t cgovande/multi-nginx ./nginx
   - docker build -t cgovande/multi-server ./server
   - docker build -t cgovande/multi-worker ./worker
+  # Log into Docker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push cgovande/multi-client
   - docker push cgovande/multi-nginx
