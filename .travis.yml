@@ -1,0 +1,20 @@
+sudo required
+services:
+  - docker
+
+before_install:
+  - docker build -t cgovande/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true cgovande/react-test npm test
+
+after_success:
+  - docker build -t cgovande/multi-client ./client
+  - docker build -t cgovande/multi-nginx ./nginx
+  - docker build -t cgovande/multi-server ./server
+  - docker build -t cgovande/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push cgovande/multi-client
+  - docker push cgovande/multi-nginx
+  - docker push cgovande/multi-server
+  - docker push cgovande/multi-worker
